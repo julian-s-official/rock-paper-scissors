@@ -13,7 +13,6 @@ function getComputerChoice(){
     'Scissors'
   ];
   let randomNumber = Math.floor(Math.random()*array.length);
-
   return array[randomNumber];
 }
 
