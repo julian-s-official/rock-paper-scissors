@@ -55,24 +55,4 @@ function playRound(playerSelection, computerSelection) {
   }
 }
 
-function game() {
-  let playerScore = 0;
-  let computerScore = 0;
-  let result;
-  for (let i=0; i < 5; i++) {
-    const playerSelection = prompt("Make your choice!")
-    const computerSelection = getComputerChoice();
-    result = playRound(playerSelection, computerSelection);
-    console.log(result);
-    if (result.search("Win") > 0) {
-      playerScore++;
-    } else if (result.search("Lose") > 0) {
-      computerScore ++;
-    }
-  }
-  console.log(`Player: ${playerScore} points`);
-  console.log(`Computer: ${computerScore} points`);
-  console.log(`Draw: ${5 - playerScore - computerScore} times`);
-}
-
 game();
