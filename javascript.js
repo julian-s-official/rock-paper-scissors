@@ -16,7 +16,11 @@ function getComputerChoice(){
   return array[randomNumber];
 }
 
-function playRound(playerSelection, computerSelection) {
+const result = document.querySelector('#result');
+
+function playRound(event) {
+  const playerSelection = event.target.id;
+  const computerSelection = getComputerChoice();
   if (playerSelection.toLowerCase() == 'rock') {
     switch(computerSelection.toLowerCase()) {
       case 'rock':
@@ -55,3 +59,12 @@ function playRound(playerSelection, computerSelection) {
   }
 }
 
+function playGame(event){
+  result.textContent = playRound(event);
+}
+
+const buttons = document.querySelectorAll('button');
+
+buttons.forEach((button) => {
+  button.addEventListener('click', playGame);
+});
