@@ -1,11 +1,3 @@
-/* 
-Requirements
-------------
-Function to randomly generate Rock, Paper or Scissors as computer choice
-Function that has player and computer selection as input and plays game
-Function Game that allows multiple rounds and outputs results
-*/
-
 function getComputerChoice(){
   let array = [
     'Rock',
@@ -15,8 +7,6 @@ function getComputerChoice(){
   let randomNumber = Math.floor(Math.random()*array.length);
   return array[randomNumber];
 }
-
-const result = document.querySelector('#result');
 
 function playRound(event) {
   const playerSelection = event.target.id;
@@ -59,12 +49,32 @@ function playRound(event) {
   }
 }
 
-function playGame(event){
-  result.textContent = playRound(event);
-}
+let playerScore = 0;
+let computerScore = 0;
 
 const buttons = document.querySelectorAll('button');
+const result = document.querySelector('#result');
+const counter = document.querySelector('#counter');
 
 buttons.forEach((button) => {
   button.addEventListener('click', playGame);
 });
+
+function playGame(event){
+  result.textContent = playRound(event);
+  if (result.textContent.search("Win") > 0) {
+    playerScore++;
+  } else if (result.textContent.search("Lose") > 0) {
+    computerScore ++;
+  }
+  counter.textContent = `Player: ${playerScore} Computer: ${computerScore}`;
+  if (playerScore == 5) {
+    counter.textContent = 'You Win!!';
+    playerScore = 0;
+    computerScore = 0;
+  } else if (computerScore == 5) {
+    counter.textContent = 'You Lose!!';
+    playerScore = 0;
+    computerScore = 0;
+  }
+}
