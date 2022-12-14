@@ -1,80 +1,86 @@
 function getComputerChoice(){
   let array = [
-    'Rock',
-    'Paper',
-    'Scissors'
+    'rock',
+    'paper',
+    'scissors'
   ];
   let randomNumber = Math.floor(Math.random()*array.length);
   return array[randomNumber];
 }
 
-function playRound(event) {
-  const playerSelection = event.target.id;
-  const computerSelection = getComputerChoice();
-  if (playerSelection.toLowerCase() == 'rock') {
-    switch(computerSelection.toLowerCase()) {
-      case 'rock':
-        return "It's a draw!";
-      case 'paper':
-        return "You Lose! Paper beats Rock";
-      case 'scissors':
-        return "You Win! Rock beats Scissors!";
-      default: 
-        return "Something went wrong";
-    }
-  } else if (playerSelection.toLowerCase() == 'paper') {
-    switch(computerSelection.toLowerCase()) {
-      case 'rock':
-        return "You Win! Paper beats Rock!";
-      case 'paper':
-        return "It's a draw!";
-      case 'scissors':
-        return "You Lose! Scissors beats Paper";
-      default: 
-        return "Something went wrong";
-    }
-  } else if (playerSelection.toLowerCase() == 'scissors') {
-    switch(computerSelection.toLowerCase()) {
-      case 'rock':
-        return "You Lose! Rock beats Scissors!";
-      case 'paper':
-        return "You Win! Scissors beat Paper!";
-      case 'scissors':
-        return "It's a draw!";
-      default: 
-        return "Something went wrong";
-    }
-  } else {
-    return "Didn't select Rock, Paper or Scissors!"
+/* Returns Winner: (choice)A, (choice)B or D(raw) */
+function getWinner(choiceA, choiceB){
+  switch(choiceA) {
+    case 'rock':
+      switch(choiceB) {
+        case 'rock':
+          return('D');
+        case 'paper':
+          return('B');
+        case 'scissors':
+          return('A');
+      }
+    case 'paper':
+      switch(choiceB) {
+        case 'rock':
+          return('A');
+        case 'paper':
+          return('D');
+        case 'scissors':
+          return('B');
+      }
+    case 'scissors':
+      switch(choiceB) {
+        case 'rock':
+          return('B');
+        case 'paper':
+          return('A');
+        case 'scissors':
+          return('D');
+      }
   }
 }
+
+/* Plays a single round and returns the winner as A, B or D(raw) */
+function playRound(event){
+  const playerSelection = event.target.id;
+  const computerSelection = getComputerChoice();
+  let winner = getWinner(playerSelection, computerSelection);
+  let dict = {
+    player: playerSelection,
+    computer: computerSelection,
+    winner: winner
+  }
+  return dict;
+}
+
+const buttons = document.querySelectorAll('button');
+
+buttons.forEach((button) =>{
+  button.addEventListener('click', playGame);
+});
 
 let playerScore = 0;
 let computerScore = 0;
 
-const buttons = document.querySelectorAll('button');
-const result = document.querySelector('#result');
-const counter = document.querySelector('#counter');
-
-buttons.forEach((button) => {
-  button.addEventListener('click', playGame);
-});
-
 function playGame(event){
-  result.textContent = playRound(event);
-  if (result.textContent.search("Win") > 0) {
-    playerScore++;
-  } else if (result.textContent.search("Lose") > 0) {
-    computerScore ++;
+  const result = document.querySelector('#result');
+  const counter = document.querySelector('#counter');
+  let gameSummary = playRound(event);
+  let resultText = '';
+  switch (gameSummary["winner"]) {
+    case 'A':
+      playerScore += 1;
+      resultText = `You Won!`;
+      break;
+    case 'B':
+      computerScore += 1;
+      resultText = `You Lost!`;
+      break;
+    case 'D':
+      resultText = `Draw!`;
+      break;
   }
-  counter.textContent = `Player: ${playerScore} Computer: ${computerScore}`;
-  if (playerScore == 5) {
-    counter.textContent = 'You Win!!';
-    playerScore = 0;
-    computerScore = 0;
-  } else if (computerScore == 5) {
-    counter.textContent = 'You Lose!!';
-    playerScore = 0;
-    computerScore = 0;
-  }
+  counter.textContent = `Player ${playerScore} | ${computerScore} Computer`;
+  result.textContent = resultText;
 }
